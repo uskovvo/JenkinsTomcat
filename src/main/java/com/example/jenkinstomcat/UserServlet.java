@@ -5,6 +5,9 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 public class UserServlet extends HttpServlet {
     private UsersDAO usersDAO;
@@ -18,8 +21,19 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        System.out.println(usersDAO.getAllUsers());
         String action = request.getParameter("action");
+
+//        Map<String, Consumer<String>> map = Map.of(
+//                "delete", (value) -> deleteUser(request, response),
+//                "create", (value) -> addNewUser(request, response),
+//                "update", (value) -> updateUser(request, response));
+//
+//        Optional
+//                .ofNullable(map
+//                        .get(action))
+//                .orElse
+//                        (value -> showAllUsers(request, response))
+//                .accept(action);
         switch (action == null ? "All" : action) {
             case "delete":
                 deleteUser(request, response);
@@ -40,6 +54,7 @@ public class UserServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         User user = new User();
         user.setName(request.getParameter("name"));
+        user.setSurname(request.getParameter("surname"));
         user.setAge(Integer.parseInt(request.getParameter("age")));
         if (!request.getParameter("id").equals("")) {
             user.setId(Long.valueOf(request.getParameter("id")));

@@ -3,21 +3,24 @@ package com.example.jenkinstomcat;
 public class User {
 
     private Long id;
-
     private String name;
+
+    private String surname;
     private int age;
 
     public User() {
     }
 
-    public User(Long id, String name, int age) {
+    public User(Long id, String name, String surname, int age) {
         this.id = id;
         this.name = name;
+        this.surname = surname;
         this.age = age;
     }
 
-    public User(String name, int age) {
+    public User(String name, String surname, int age) {
         this.name = name;
+        this.surname = surname;
         this.age = age;
     }
 
@@ -35,6 +38,14 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
     public int getAge() {

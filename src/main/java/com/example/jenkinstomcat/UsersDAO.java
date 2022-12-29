@@ -22,8 +22,9 @@ public class UsersDAO {
             while (resultSet.next()) {
                 Long id = resultSet.getLong("id");
                 String name = resultSet.getString("name");
+                String surname = resultSet.getString("surname");
                 int age = resultSet.getInt("age");
-                User user = new User(id, name, age);
+                User user = new User(id, name, surname, age);
                 users.add(user);
             }
 
@@ -46,9 +47,10 @@ public class UsersDAO {
             resultSet.next();
 
             String name = resultSet.getString("name");
+            String surname = resultSet.getString("surname");
             int age = resultSet.getInt("age");
 
-            user = new User(id, name, age);
+            user = new User(id, name, surname, age);
 
             preparedStatement.close();
         } catch (SQLException e) {
@@ -62,10 +64,11 @@ public class UsersDAO {
 
         try {
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("INSERT INTO Users(name, age) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
+                    .prepareStatement("INSERT INTO users(name, surname, age) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 
             preparedStatement.setString(1, user.getName());
-            preparedStatement.setInt(2, user.getAge());
+            preparedStatement.setString(2, user.getSurname());
+            preparedStatement.setInt(3, user.getAge());
 
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
@@ -86,14 +89,15 @@ public class UsersDAO {
 
         try {
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("UPDATE Users SET name=?, age=? WHERE id=?",
+                    .prepareStatement("UPDATE users SET name=?, surname=?, age=? WHERE id=?",
                             Statement.RETURN_GENERATED_KEYS);
 
             long id = updateUser.getId();
 
             preparedStatement.setString(1, updateUser.getName());
-            preparedStatement.setInt(2, updateUser.getAge());
-            preparedStatement.setLong(3, id);
+            preparedStatement.setString(2, updateUser.getSurname());
+            preparedStatement.setInt(3, updateUser.getAge());
+            preparedStatement.setLong(4, id);
 
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0){
@@ -114,7 +118,7 @@ public class UsersDAO {
 
         try {
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("DELETE FROM Users WHERE id=?");
+                    .prepareStatement("DELETE FROM users WHERE id=?");
 
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();

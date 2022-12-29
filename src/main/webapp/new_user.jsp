@@ -12,11 +12,16 @@
 <div>
     <form method="post" action="user">
         <h2>${param.action == 'create' ? 'Добавить нового пользовотеля' : 'Редактировать пользователя'}</h2>
-        <label>Имя пользователя</label>
-        <br>
+
         <input type="hidden" name="id" value="${user.id}">
         <br>
+        <label>Имя</label>
+        <br>
         <input type="text" name="name" value="${user.name}">
+        <br>
+        <label>Фамилия</label>
+        <br>
+        <input type="text" name="surname" value="${user.surname}">
         <br>
         <label>Возраст</label>
         <br>
