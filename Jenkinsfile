@@ -1,24 +1,14 @@
 pipeline {
     agent any
-    environment{
-        PATH = "/usr/share/maven/bin:$PATH"
+
+    tools {
+        maven '3.8.6'
     }
 
     stages {
-        stage ("clone code") {
+        stage('Deploy') {
             steps {
-                git credentialsId: 'ssh-key-github', url: 'git@github.com:uskovvo/JenkinsTomcat.git'
-            }
-        }
-
-        stage ("build code") {
-            steps {
-                sh "mvn clean install"
-            }
-        }
-        stage ("build code") {
-            steps {
-                sshagent(['deploy_srv_tomcat'])
+                sh "mvn -Dmaven.test.skip=true tomcat7:redeploy"
             }
         }
     }
