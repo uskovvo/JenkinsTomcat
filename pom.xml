@@ -7,7 +7,6 @@
     <groupId>com.example</groupId>
     <artifactId>JenkinsTomcat</artifactId>
     <version>1</version>
-    <name>JenkinsTomcat</name>
     <packaging>war</packaging>
 
     <properties>
@@ -16,6 +15,9 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <junit.version>5.9.1</junit.version>
     </properties>
+
+    <name>JenkinsTomcat Maven Webapp</name>
+    <url>http://maven.apache.org</url>
 
     <dependencies>
         <dependency>
@@ -49,20 +51,6 @@
     </dependencies>
 
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>3.3.2</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>9</source>
-                    <target>9</target>
-                </configuration>
-            </plugin>
-        </plugins>
+        <finalName>JenkinsTomcat</finalName>
     </build>
 </project>
