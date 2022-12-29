@@ -1,22 +1,25 @@
 pipeline {
     agent any
-
-    tools {
-        jdk "11"
-        maven "3.8.6"
+    environment{
+        PATH = "/usr/share/maven/bin:$PATH"
     }
 
     stages {
-        booleanParam(defaultValue: true, description: 'run test tests', name: 'rest')
-        booleanParam(defaultValue: false, description: 'run web tests', name: 'web')
-    }
-
-    stages {
-        stage ('rest tests') {
-            when {
-                expression { return params.rest }
+        stage ("clone code") {
+            steps {
+                git credentialsId: 'ssh-key-github', url: 'git@github.com:uskovvo/JenkinsTomcat.git'
             }
-            steps
+        }
+
+        stage ("build code") {
+            steps {
+                sh "mvn clean install"
+            }
+        }
+        stage ("build code") {
+            steps {
+                sshagent(['deploy_srv_tomcat'])
+            }
         }
     }
 }
