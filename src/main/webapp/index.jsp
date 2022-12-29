@@ -11,6 +11,6 @@
     <title>Title</title>
 </head>
 <body>
-<button><a href="/JenkinsTomcat-New_Project/user">Покажи пользователей</a></button>
+<button><a href="user">Покажи пользователей</a></button>
 </body>
 </html>
