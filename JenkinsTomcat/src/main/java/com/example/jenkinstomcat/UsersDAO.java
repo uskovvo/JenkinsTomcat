@@ -26,10 +26,11 @@ public class UsersDAO {
                 User user = new User(id, name, age);
                 users.add(user);
             }
+
+            preparedStatement.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
         return users;
     }
 
@@ -37,7 +38,7 @@ public class UsersDAO {
         User user = null;
         try {
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("SELECT * FROM User WHERE id=?");
+                    .prepareStatement("SELECT * FROM users WHERE id=?");
 
             preparedStatement.setLong(1, id);
 
@@ -49,6 +50,7 @@ public class UsersDAO {
 
             user = new User(id, name, age);
 
+            preparedStatement.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -60,49 +62,67 @@ public class UsersDAO {
 
         try {
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("INSERT INTO Users VALUES (?, ?)");
+                    .prepareStatement("INSERT INTO Users(name, age) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
 
             preparedStatement.setString(1, user.getName());
             preparedStatement.setInt(2, user.getAge());
 
-            preparedStatement.executeUpdate();
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("user wasn't saved");
+            }
+            ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                user.setId(generatedKeys.getLong("id"));
+            }
+            preparedStatement.close();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public boolean update(long id, User updateUser) {
-        boolean result;
+    public void update(User updateUser) {
 
         try {
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("UPDATE Users SET name=?, age=? WHERE id=?");
+                    .prepareStatement("UPDATE Users SET name=?, age=? WHERE id=?",
+                            Statement.RETURN_GENERATED_KEYS);
+
+            long id = updateUser.getId();
 
             preparedStatement.setString(1, updateUser.getName());
             preparedStatement.setInt(2, updateUser.getAge());
+            preparedStatement.setLong(3, id);
 
-            result = preparedStatement.executeUpdate() > 0;
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0){
+                throw new SQLException("user wasn't updated");
+            }
+            ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+            if(generatedKeys.next()){
+                updateUser.setId(generatedKeys.getLong("id"));
+            }
+
+            preparedStatement.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-        return result;
     }
 
-    public boolean delete(long id) {
-        boolean result;
+    public void delete(long id) {
 
         try {
             PreparedStatement preparedStatement = connection
                     .prepareStatement("DELETE FROM Users WHERE id=?");
 
             preparedStatement.setLong(1, id);
-            result = preparedStatement.executeUpdate() > 0;
+            preparedStatement.executeUpdate();
+
+            preparedStatement.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-        return result;
     }
 
     public Connection getConnection() {
