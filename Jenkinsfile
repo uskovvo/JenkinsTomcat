@@ -1,18 +1,10 @@
 pipeline {
-    agent any
-
-    tools {
-        maven '3.8.6'
-    }
-
-    stages {
-        stage('Deploy') {
-            steps {
-                sh 'mvn clean package'
-            }
-            steps {
-                sh "mvn -Dmaven.test.skip=true tomcat7:redeploy"
-            }
-        }
-    }
-}
+     agent { docker { image 'maven:3.8.6-openjdk-11-slim' } }
+     stages {
+         stage('build') {
+             steps {
+                 sh 'mvn --version'
+             }
+         }
+     }
+ }
