@@ -15,9 +15,12 @@ pipeline {
             }
         }
         stage("deploy") {
-            sshagent(['deploy_srv_tomcat']) {
-                sh 'ssh -o StrictHostKeyChecking=no /JenkinsTomcat.war valera@192.168.0.200:8080:/opt/tomcat/webapps'
+            steps{
+                sshagent(['deploy_srv_tomcat']) {
+                    sh 'ssh -o StrictHostKeyChecking=no /JenkinsTomcat.war valera@192.168.0.200:8080:/opt/tomcat/webapps'
+                }
             }
+
         }
     }
 }
