@@ -16,7 +16,7 @@ pipeline {
         }
         stage("deploy") {
             steps{
-                sshagent(['deploy_srv_tomcat']) {
+                sshagent(['tomcat-ssh-key']) {
                     sh 'ssh -o StrictHostKeyChecking=no /JenkinsTomcat.war valera@192.168.0.200:8080:/opt/tomcat/webapps'
                 }
             }
