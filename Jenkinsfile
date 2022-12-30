@@ -17,7 +17,7 @@ pipeline {
         stage("deploy") {
             steps{
                 sshagent(['new-ssh-key']) {
-                    sh 'ssh -o StrictHostKeyChecking=no /JenkinsTomcat.war valera@192.168.0.200:8080:/opt/tomcat/webapps'
+                    sh 'scp -o StrictHostKeyChecking=no /JenkinsTomcat.war valera@192.168.0.200:8080:/opt/tomcat/webapps'
                 }
             }
 
