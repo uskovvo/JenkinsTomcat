@@ -20,7 +20,7 @@ pipeline {
 
         stage("deploy") {
             steps{
-                build job: 'TomcatProjectDeploy'
+               deploy adapters: [tomcat9(credentialsId: 'run_app-deploy', path: '', url: 'http://192.168.0.200:8080')], contextPath: null, war: '**/*.war'
             }
         }
     }
