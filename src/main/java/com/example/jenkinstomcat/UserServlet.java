@@ -4,6 +4,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -11,42 +12,25 @@ import java.util.function.Consumer;
 
 public class UserServlet extends HttpServlet {
     private UsersDAO usersDAO;
+    private static Map<String, ParametrSwitcher> parameterMap;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         usersDAO = new UsersDAO();
+        parameterMap = new HashMap<>();
+
+        parameterMap.put("delete", UserServlet::deleteUser);
+        parameterMap.put("update", UserServlet::updateUser);
+        parameterMap.put("create", UserServlet::addNewUser);
+        parameterMap.put("all", UserServlet::showAllUsers);
+        parameterMap.put(null, UserServlet::showAllUsers);
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String action = request.getParameter("action");
-
-//        Map<String, Consumer<String>> map = Map.of(
-//                "delete", (value) -> deleteUser(request, response),
-//                "create", (value) -> addNewUser(request, response),
-//                "update", (value) -> updateUser(request, response));
-//
-//        Optional
-//                .ofNullable(map
-//                        .get(action))
-//                .orElse
-//                        (value -> showAllUsers(request, response))
-//                .accept(action);
-        switch (action == null ? "All" : action) {
-            case "delete":
-                deleteUser(request, response);
-                break;
-            case "create":
-                addNewUser(request, response);
-                break;
-            case "update":
-                updateUser(request, response);
-                break;
-            default:
-                showAllUsers(request, response);
-        }
+        executeCrudOperation(request, response, this);
     }
 
     @Override
@@ -104,5 +88,11 @@ public class UserServlet extends HttpServlet {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static void executeCrudOperation(HttpServletRequest req, HttpServletResponse resp, UserServlet servlet) throws ServletException, IOException {
+        String action = req.getParameter("action");
+        parameterMap.get(action).switchParameter(servlet, req, resp);
+
     }
 }

@@ -6,11 +6,11 @@ pipeline {
     }
 
     stages {
-        stage("git") {
-            steps {
-                git credentialsId: 'ssh-key-github', url: 'git@github.com:uskovvo/JenkinsTomcat.git'
-            }
-        }
+//         stage("git") {
+//             steps {
+//                 git credentialsId: 'ssh-key-github', url: 'git@github.com:uskovvo/JenkinsTomcat.git'
+//             }
+//         }
 
         stage("build") {
             steps {

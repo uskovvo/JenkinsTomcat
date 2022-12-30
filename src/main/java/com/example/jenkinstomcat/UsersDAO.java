@@ -38,12 +38,10 @@ public class UsersDAO {
     public User getUserById(long id) {
         User user = null;
         try {
-            PreparedStatement preparedStatement = connection
-                    .prepareStatement("SELECT * FROM users WHERE id=?");
+            CallableStatement statement = connection.prepareCall("{call get_by_id(?)}");
+            statement.setLong(1, id);
 
-            preparedStatement.setLong(1, id);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
+            ResultSet resultSet = statement.executeQuery();
             resultSet.next();
 
             String name = resultSet.getString("name");
@@ -52,7 +50,7 @@ public class UsersDAO {
 
             user = new User(id, name, surname, age);
 
-            preparedStatement.close();
+            statement.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -114,16 +112,15 @@ public class UsersDAO {
         }
     }
 
-    public void delete(long id) {
+    public boolean delete(long id) {
 
         try {
-            PreparedStatement preparedStatement = connection
-                    .prepareStatement("DELETE FROM users WHERE id=?");
+            Statement statement = connection.createStatement();
+            String query = String.format("DELETE FROM users WHERE id = %d", id);
+            int affectedRows = statement.executeUpdate(query);
+            statement.close();
 
-            preparedStatement.setLong(1, id);
-            preparedStatement.executeUpdate();
-
-            preparedStatement.close();
+            return affectedRows != 0;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
