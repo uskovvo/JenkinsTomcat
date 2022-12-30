@@ -18,6 +18,7 @@ pipeline {
             steps{
                 sshagent(['2-ssh-key'])  {
                     sh 'echo "Hello World"'
+                    sh 'hostname -I'
                     sh 'ls'
                     sh 'ssh -o StrictHostKeyChecking=yes valera@192.168.0.200:8080'
                     sh 'cd /opt/tomcat/webapps'
