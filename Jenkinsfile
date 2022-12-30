@@ -18,7 +18,7 @@ pipeline {
             steps{
                 sshagent(['2-ssh-key'])  {
                     sh 'echo "Hello World"'
-                    sh 'ssh valera@192.168.0.200:8080:/opt/tomcat/webapps/JenkinsTomcat.war'
+                    sh 'ssh -o StrictHostKeyChecking=no /JenkinsTomcat.war valera@192.168.0.200:8080:/opt/tomcat/webapps'
                 }
             }
 
