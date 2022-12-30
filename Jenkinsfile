@@ -20,8 +20,9 @@ pipeline {
                     sh 'echo "Hello World"'
                     sh 'hostname -I'
                     sh 'ls'
-                    sh 'ssh -o StrictHostKeyChecking=yes valera@192.168.0.200:8080'
+                    sh 'ssh valera@192.168.0.200'
                     sh 'cd /opt/tomcat/webapps'
+                    sh 'ls'
                 }
             }
 
