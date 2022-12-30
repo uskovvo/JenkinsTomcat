@@ -16,14 +16,7 @@ pipeline {
         }
         stage("deploy") {
             steps{
-                sshagent(['2-ssh-key'])  {
-                    sh 'echo "Hello World"'
-                    sh 'hostname -I'
-                    sh 'ls'
-                    sh 'ssh -tt valera@192.168.0.200'
-                    sh 'cd /opt/tomcat/webapps'
-                    sh 'ls'
-                }
+                build job: 'TomcatProjectDeploy'
             }
 
         }
