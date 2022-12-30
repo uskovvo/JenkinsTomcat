@@ -20,7 +20,7 @@ pipeline {
                     sh 'echo "Hello World"'
                     sh 'hostname -I'
                     sh 'ls'
-                    sh 'ssh valera@192.168.0.200'
+                    sh 'ssh -tt valera@192.168.0.200'
                     sh 'cd /opt/tomcat/webapps'
                     sh 'ls'
                 }
