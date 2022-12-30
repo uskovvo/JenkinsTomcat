@@ -17,7 +17,7 @@ pipeline {
         stage("deploy") {
             steps{
                 sshagent(['new-ssh-key']) {
-                    sh 'scp -o StrictHostKeyChecking=no /JenkinsTomcat.war valera@192.168.0.200:8080:/opt/tomcat/webapps'
+                    sh 'sshPublisher(publishers: [sshPublisherDesc(configName: ' + 'Andersen_With_Tomcat' + ', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: ' + 'sudo systemctl status tomcat' + ', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: ' + '[, ]+'+ ', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '+ '**/*.war' + ')' +']' +', usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])'
                 }
             }
 
